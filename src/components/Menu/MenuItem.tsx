@@ -14,13 +14,18 @@ const MenuItemBox = styled.div<MenuItemBoxProps>`
   border-width: ${({ focused }) => (focused ? "6px" : 0)};
   box-sizing: border-box;
   border-radius: 7px;
+  display: flex;
+  align-items:  center;
+  justify-content: center;
   margin-bottom: 37px;
 `;
 
-export function MenuItem({ focusKey: focusKeyParam }: { focusKey: string }) {
-  const { ref, focused } = useFocusable({
-    focusKey: focusKeyParam
-  });
+interface MenuItemProps {
+  label: string;
+}
 
-  return <MenuItemBox ref={ref} focused={focused} />;
+export function MenuItem({ label }: MenuItemProps) {
+  const { ref, focused } = useFocusable();
+
+  return <MenuItemBox ref={ref} focused={focused} data-testid="menu-item">{label}</MenuItemBox>;
 }

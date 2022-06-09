@@ -63,8 +63,8 @@ export function Asset({ title, color, onEnterPress, onFocus }: AssetProps) {
   });
 
   return (
-    <AssetWrapper ref={ref}>
-      <AssetBox color={color} focused={focused} />
+    <AssetWrapper ref={ref} data-testid="asset">
+      <AssetBox color={color} focused={focused} data-testid="asset-box" />
       <AssetTitle>{title}</AssetTitle>
     </AssetWrapper>
   );

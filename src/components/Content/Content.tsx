@@ -4,7 +4,6 @@ import {
   useFocusable,
   FocusContext
 } from "@noriginmedia/norigin-spatial-navigation";
-import { shuffle } from "lodash";
 import styled from "styled-components";
 import { ContentRow } from "./ContentRow";
 import { IAsset } from "./Asset";
@@ -13,24 +12,6 @@ init({
   debug: false,
   visualDebug: false
 });
-
-const rows = shuffle([
-  {
-    title: "Recommended"
-  },
-  {
-    title: "Movies"
-  },
-  {
-    title: "Series"
-  },
-  {
-    title: "TV Channels"
-  },
-  {
-    title: "Sport"
-  }
-]);
 
 const ContentWrapper = styled.div`
   flex: 1;
@@ -81,8 +62,18 @@ const ScrollingRows = styled.div`
   flex-grow: 1;
 `;
 
-export function Content() {
-  const { ref, focusKey } = useFocusable();
+interface ContentProps {
+  focusKey: string;
+  rows: {
+    title: string;
+    assets: IAsset[];
+  }[];
+}
+
+export function Content({rows, focusKey: focusKeyParam}: ContentProps) {
+  const { ref, focusKey,  } = useFocusable({
+    focusKey: focusKeyParam,
+  });
 
   const [selectedAsset, setSelectedAsset] = React.useState<IAsset | null>(null);
 
@@ -92,10 +83,10 @@ export function Content() {
 
   const onRowFocus = React.useCallback(
     ({ y }) => {
-      ref.current.scrollTo({
-        top: y,
-        behavior: "smooth"
-      });
+      if(ref.current) {
+        ref.current.scrollTop = y;
+        ref.current.style.scrollBehavior = "smooth";
+      }
     },
     [ref]
   );
@@ -107,8 +98,9 @@ export function Content() {
         <SelectedItemWrapper>
           <SelectedItemBox
             color={selectedAsset ? selectedAsset.color : "#565b6b"}
+            data-testid="selected-box"
           />
-          <SelectedItemTitle>
+          <SelectedItemTitle data-testid="selected-title">
             {selectedAsset
               ? selectedAsset.title
               : 'Press "Enter" to select an asset'}
@@ -116,8 +108,9 @@ export function Content() {
         </SelectedItemWrapper>
         <ScrollingRows ref={ref}>
           <div>
-            {rows.map(({ title }) => (
+            {rows.map(({ title, assets }) => (
               <ContentRow
+                assets={assets}
                 key={title}
                 title={title}
                 onAssetPress={onAssetPress}

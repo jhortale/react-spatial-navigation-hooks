@@ -29,9 +29,10 @@ const MenuWrapper = styled.div<MenuWrapperProps>`
 
 interface MenuProps {
   focusKey: string;
+  items: string[];
 }
 
-export function Menu({ focusKey: focusKeyParam }: MenuProps) {
+export function Menu({ focusKey: focusKeyParam, items }: MenuProps) {
   const {
     ref,
     focusSelf,
@@ -66,11 +67,9 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
     <FocusContext.Provider value={focusKey}>
       <MenuWrapper ref={ref} hasFocusedChild={hasFocusedChild}>
         <h1>Logo</h1>
-        <MenuItem focusKey="menu-1" />
-        <MenuItem focusKey="menu-2" />
-        <MenuItem focusKey="menu-3" />
-        <MenuItem focusKey="menu-4" />
-        <MenuItem focusKey="menu-5" />
+        {items.map((item) => (
+          <MenuItem key={item} label={item} />
+        ))}
       </MenuWrapper>
     </FocusContext.Provider>
   );

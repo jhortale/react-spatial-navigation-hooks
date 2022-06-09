@@ -1,0 +1,1 @@
+export default ['Home','Movies','TV Shows','Sports','Music','News','Kids','Lifestyle','Entertainment','More']
